@@ -3,16 +3,19 @@
 for xiami daily login
 version 0.2
 TODO: use decorator
-TODO: mail notification
+TODO: mail notification - done
 """
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 import re
 from selenium import webdriver
-import time
+# import time
 import os
+from basic import *
 
+
+"""
 # pre
 # get script folder path
 script_path = sys.path[0]
@@ -30,8 +33,9 @@ def log_step(tmp_log):
     print tmp_log
     file_write(tmp_log,'log.txt','a')
     v_step +=1
+    """
 
-log_step('- Begin -') #step 0
+log_step('xiami_login - Begin -') #step 0
 
 email = ''
 password = ''
@@ -97,12 +101,18 @@ if u'好友近况' in tmp:
             tmp = driver.page_source
             file_write(tmp,'source_main_checkin.html') 
         else:
-            log_step('already checkin for %s days' %checkin_day)
-            log_step('- Over -') #step final
             driver.quit()
+            log_step('already checkin for %s days' %checkin_day) 
+            log_step('xiami_login - Over -') #step final
+            """
+            mail.MailSend().send(['987663805@qq.com'],'xiami login status',\
+    'already checkin for x days')
+    """ 
             break
 else:
     log_step('error!get main page failed') #step 6
     driver.quit()
+    import mail
+    mail.MailSend.send(['987663805@qq.com'],'xiami login status',\
+    'error! get main page failed') # success to send?
     sys.exit()
-    #TODO: mail notification
