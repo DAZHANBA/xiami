@@ -12,8 +12,7 @@ class MailSend():
     port = 587
     user = 'dazhanba16@sina.com'
     password = '1990927'
-    log_step('MailSend - Begin -')
-
+    
     def connect(self):
         try:
             s = smtplib.SMTP(self.host,self.port)
@@ -33,6 +32,7 @@ class MailSend():
             msg['To'] = ','.join(receivers)
             msg['Subject'] = Header(subject, 'utf-8')
             try:
+                log_step('MailSend - Begin -')
                 s.sendmail(self.user,receivers,msg.as_string())
             except:
                 log_step('send mail failed')
@@ -41,7 +41,7 @@ class MailSend():
             else:
                 log_step("""From:%s; To:%s; Subject:%s; Body:%s; send mail successfully""" 
                 %(self.user,','.join(receivers),subject,body))
-                log_step('MailSend - Over -')
+                log_step('MailSent - Over -')
                 return 1
         else:
             log_step('MailSend - Over -')
@@ -57,14 +57,11 @@ if __name__ == '__main__':
 
 
 """
-
 receivers = ['987663805@qq.com']
 # 三个参数：第一个为文本内容，第二个 plain 设置文本格式，第三个 utf-8 设置编码
 message = MIMEText('Python 邮件发送测试...', 'plain', 'utf-8')
 subject = 'Python SMTP 邮件测试'
-
 connect = smtplib.SMTP(smtp_host,port)
 connect.login(user, password)
-
 connect.quit()
 """

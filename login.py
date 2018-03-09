@@ -4,16 +4,17 @@ for xiami daily login
 version 0.2
 TODO: use decorator
 TODO: mail notification - done
+TODO: mail specific log - done
 """
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 import re
 from selenium import webdriver
-# import time
-import os
 from basic import *
-
+import mail
+import time
 
 """
 # pre
@@ -27,13 +28,17 @@ def file_write(content,file_name,mode='w'):
         f.write(content)
     print 'already written to %s' %file_name
 
-def log_step(tmp_log):
+def log_step(v_log):
     global v_step
-    tmp_log = u"<%s> #%s: %s\n" %(time.ctime(), v_step, tmp_log)
-    print tmp_log
-    file_write(tmp_log,'log.txt','a')
+    v_log = u"<%s> #%s: %s\n" %(time.ctime(), v_step, v_log)
+    print v_log
+    file_write(v_log,'log.txt','a')
     v_step +=1
     """
+
+# mail config
+receivers = []
+subject = time.strftime("%Y-%m-%d",time.localtime())+' xiami login status'
 
 log_step('xiami_login - Begin -') #step 0
 
@@ -103,16 +108,19 @@ if u'好友近况' in tmp:
         else:
             driver.quit()
             log_step('already checkin for %s days' %checkin_day) 
-            log_step('xiami_login - Over -') #step final
-            """
-            mail.MailSend().send(['987663805@qq.com'],'xiami login status',\
-    'already checkin for x days')
-    """ 
+            detail = log_step('xiami_login - Over -') #step final, fetch tmp_log
+            
+            # start send mail
+            content = 'already checkin for %s days\ndetail:\n%s' %(checkin_day,detail)
+            # print content
+            mail.MailSend().send(receivers,subject,content)
+            
             break
+    # project_log() # no need to have two logs
 else:
-    log_step('error!get main page failed') #step 6
+    detail = log_step('error!get main page failed') #step 6, fetch tmp_log
     driver.quit()
-    import mail
-    mail.MailSend.send(['987663805@qq.com'],'xiami login status',\
-    'error! get main page failed') # success to send?
+    content = 'error! get main page failed\ndetail:\n%s' %detail
+    mail.MailSend().send(receivers,subject,content)
     sys.exit()
+    
