@@ -37,7 +37,7 @@ def log_step(v_log):
     """
 
 # mail config
-receivers = []
+receivers = ['']
 subject = time.strftime("%Y-%m-%d",time.localtime())+' xiami login status'
 
 log_step('xiami_login - Begin -') #step 0
@@ -115,6 +115,10 @@ if u'好友近况' in tmp:
             # print content
             mail.MailSend().send(receivers,subject,content)
             
+            """
+            mail.MailSend().send(['987663805@qq.com'],'xiami login status',\
+            ('already checkin for %s days\ndetail:\n%s' %(checkin_day,tmp_log)))
+            """
             break
     # project_log() # no need to have two logs
 else:
