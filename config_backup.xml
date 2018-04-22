@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <path>
+    <log>log.txt</log>
+  </path>
+  <email>
+    <from>
+        <user></user>
+        <password></password>
+        <smtp></smtp>
+        <port></port>
+    </from>
+    <to>
+        <user></user>
+        <password></password>
+        <smtp></smtp>
+        <port></port>
+    </to>
+  </email>
+  <xiami>
+    <user></user>
+    <password></password>
+  </xiami>
+</config>
+
+
+
