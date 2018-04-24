@@ -23,6 +23,17 @@ with open ("config.xml") as f:
 config_xml = etree.XML(config)
 PATH_LOG = config_xml.xpath("//log[1]/text()")[0]
 
+MAIL_USER = config_xml.xpath("//from/user[1]/text()")
+MAIL_PW = config_xml.xpath("//from/password[1]/text()")
+MAIL_SMTP = config_xml.xpath("//from/smtp[1]/text()")
+MAIL_PORT = config_xml.xpath("//from/port[1]/text()")
+
+TO_USER = config_xml.xpath("//to/user[1]/text()")
+
+XIAMI_USER = config_xml.xpath("//xiami/user[1]/text()")[0]
+XIAMI_PW = config_xml.xpath("//xiami/password[1]/text()")[0]
+
+
 
 global v_step
 v_step = 0
