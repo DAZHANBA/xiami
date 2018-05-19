@@ -5,14 +5,21 @@ sys.setdefaultencoding('utf8')
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
-from basic import *
+from basic_draft import *
 
-class MailSend():
+class MailSend(object):
+    """
     host = 'smtp.sina.com'
     port = 587
     user = 'dazhanba16@sina.com'
     password = '1990927'
-    
+    """
+    def __init__(self, host, port, user, password):
+        self.host = str(host)
+        self.port = int(port)
+        self.user = str(user)
+        self.password = str(password)
+        
     def connect(self):
         try:
             s = smtplib.SMTP(self.host,self.port)
@@ -49,7 +56,7 @@ class MailSend():
 
 
 if __name__ == '__main__':
-    x = MailSend()
+    x = MailSend('smtp.sina.com',587,'dazhanba16@sina.com','1990927')
     x.send(['987663805@qq.com'],'test','test')
 
 

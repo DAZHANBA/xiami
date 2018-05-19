@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 for xiami daily login
-version 0.2
+version 0.3
+upgrade chromedriver
 TODO: use decorator
 TODO: mail notification - done
 TODO: mail specific log - done
+TODO: all path join in different platform - done
+TODO: config in XML - done
+TODO: if '24bc' in tmp
 """
 
 import sys
@@ -12,19 +16,19 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 import re
 from selenium import webdriver
-from basic import *
-import mail
+from basic_draft import *
+import mail_draft
 import time
 
 """
 # pre
 # get script folder path
-script_path = sys.path[0]
-# print script_path
+SCRIPT_PATH = sys.path[0]
+# print SCRIPT_PATH
 v_step = 0
 
 def file_write(content,file_name,mode='w'):
-    with open(script_path+'\\'+file_name,mode) as f:
+    with open(SCRIPT_PATH+'\\'+file_name,mode) as f:
         f.write(content)
     print 'already written to %s' %file_name
 
@@ -37,17 +41,24 @@ def log_step(v_log):
     """
 
 # mail config
-receivers = ['']
+receivers = [str(TO_USER)]
+print 'receivers: %s' %receivers
+
 subject = time.strftime("%Y-%m-%d",time.localtime())+' xiami login status'
 
 log_step('xiami_login - Begin -') #step 0
 
-email = ''
-password = ''
-# diferent by machine
-chrome_driver_path = r''
+email = str(XIAMI_USER)
+print 'XIAMI_USER: %s' %XIAMI_USER
+password = str(XIAMI_PW)
+print 'XIAMI_PW: %s' %XIAMI_PW
+code = str(CODE)
+print 'CODE: %s' %CODE
 
-login_pat = re.compile(ur'<a href="http://www.xiami.com/web\?(\d*)">首页</a>',re.I)
+# diferent by machine
+chrome_driver_path = str(PATH_SELENIUM)
+
+login_pat = re.compile(ur'//www.xiami.com/web\?(\d*)">首页</a>',re.I) # http://www.xiami.com/web?
 checkin_pat = re.compile(ur'已连续签到(.*)天',re.I)
 
 xiami_web_url = r'http://m.xiami.com/web'
@@ -71,7 +82,7 @@ while True:
     driver.find_element_by_name('LoginButton').click()
     time.sleep(0.5)
     tmp = driver.page_source
-    if u'24BC' in tmp:
+    if CODE in tmp:
         file_write(tmp,'source_home.html')
         log_step('already logined xiami_home') #step 4
         break
@@ -79,9 +90,11 @@ while True:
 try:    
     main_seq = login_pat.search(tmp).group(1)
     main_url = u'http://www.xiami.com/web?' + main_seq
+    print "main_url: %s" %main_url
     log_step('get main_url: %s' %main_url) #step 5
 except:
     log_step('error!main_url parsing failed') #step 5
+    driver.quit()
     sys.exit()
 
 
@@ -113,7 +126,8 @@ if u'好友近况' in tmp:
             # start send mail
             content = 'already checkin for %s days\ndetail:\n%s' %(checkin_day,detail)
             # print content
-            mail.MailSend().send(receivers,subject,content)
+            tmp_mail = mail_draft.MailSend(MAIL_SMTP,MAIL_PORT,MAIL_USER,MAIL_PW)
+            tmp_mail.send(receivers,subject,content)
             
             """
             mail.MailSend().send(['987663805@qq.com'],'xiami login status',\
@@ -125,6 +139,7 @@ else:
     detail = log_step('error!get main page failed') #step 6, fetch tmp_log
     driver.quit()
     content = 'error! get main page failed\ndetail:\n%s' %detail
-    mail.MailSend().send(receivers,subject,content)
+    tmp_mail = mail_draft.MailSend(MAIL_SMTP,MAIL_PORT,MAIL_USER,MAIL_PW)
+    tmp_mail.send(receivers,subject,content)
     sys.exit()
     

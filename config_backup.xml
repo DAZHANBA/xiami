@@ -2,6 +2,7 @@
 <config>
   <path>
     <log>log.txt</log>
+    <selenium></selenium>
   </path>
   <email>
     <from>
@@ -20,6 +21,7 @@
   <xiami>
     <user></user>
     <password></password>
+    <code></code>
   </xiami>
 </config>
 
