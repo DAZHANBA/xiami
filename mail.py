@@ -5,7 +5,7 @@ sys.setdefaultencoding('utf8')
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
-from basic_draft import *
+from basic import *
 
 class MailSend(object):
     """

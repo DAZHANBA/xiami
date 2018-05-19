@@ -16,8 +16,8 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 import re
 from selenium import webdriver
-from basic_draft import *
-import mail_draft
+from basic import *
+import mail
 import time
 
 """
