@@ -126,7 +126,7 @@ if u'好友近况' in tmp:
             # start send mail
             content = 'already checkin for %s days\ndetail:\n%s' %(checkin_day,detail)
             # print content
-            tmp_mail = mail_draft.MailSend(MAIL_SMTP,MAIL_PORT,MAIL_USER,MAIL_PW)
+            tmp_mail = mail.MailSend(MAIL_SMTP,MAIL_PORT,MAIL_USER,MAIL_PW)
             tmp_mail.send(receivers,subject,content)
             
             """
@@ -139,7 +139,7 @@ else:
     detail = log_step('error!get main page failed') #step 6, fetch tmp_log
     driver.quit()
     content = 'error! get main page failed\ndetail:\n%s' %detail
-    tmp_mail = mail_draft.MailSend(MAIL_SMTP,MAIL_PORT,MAIL_USER,MAIL_PW)
+    tmp_mail = mail.MailSend(MAIL_SMTP,MAIL_PORT,MAIL_USER,MAIL_PW)
     tmp_mail.send(receivers,subject,content)
     sys.exit()
     
